@@ -1,0 +1,22 @@
+---
+import Layout from '../../layouts/default.astro';
+import { Dashboard as ClientDashboard } from '../../components/react/dashboard';
+
+export async function getStaticPaths() {
+  return [
+    {
+      params: { slug: undefined },
+    },
+    {
+      params: { slug: 'account' },
+    },
+    {
+      params: { slug: 'settings' },
+    },
+  ];
+}
+---
+
+<Layout>
+  <ClientDashboard client:only url={Astro.url.toString()} />
+</Layout>

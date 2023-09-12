@@ -1,0 +1,15 @@
+.header {
+  display: flex;
+  gap: 1rem;
+  margin-block-end: 2rem;
+
+  & a {
+    border: 1px solid #373d3a;
+    border-radius: 0.25rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+.avatarBox {
+  border: 1px solid #373d3a;
+}
