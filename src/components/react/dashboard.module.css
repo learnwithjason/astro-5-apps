@@ -1,13 +1,31 @@
 .header {
   display: flex;
   gap: 1rem;
-  margin-block-end: 2rem;
+  margin-inline: auto;
+  max-width: min(90vw, 875px);
 
   & a {
     border: 1px solid #373d3a;
     border-radius: 0.25rem;
+    color: #373d3a;
     padding: 0.25rem 0.5rem;
+    text-decoration: none;
   }
+}
+
+.container {
+  margin-inline: auto;
+  max-width: min(90vw, 875px);
+  padding-block: 2rem;
+}
+
+.signInBox > div {
+  margin-inline: auto;
+  padding-block: 2rem;
+}
+
+.rootBox {
+  margin-inline-start: auto;
 }
 
 .avatarBox {

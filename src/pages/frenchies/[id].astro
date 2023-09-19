@@ -1,0 +1,79 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../layouts/default.astro';
+
+export const getStaticPaths = async () => {
+	const frenchies = await getCollection('frenchies');
+
+	return frenchies.map((frenchie) => {
+		const prevFrenchie = frenchies.find(
+			(f) => Number(f.id) === Number(frenchie.id) - 1,
+		);
+		const nextFrenchie = frenchies.find(
+			(f) => Number(f.id) === Number(frenchie.id) + 1,
+		);
+
+		return {
+			params: { id: frenchie.id },
+			props: {
+				frenchie,
+				prevId: prevFrenchie?.id,
+				nextId: nextFrenchie?.id,
+			},
+		};
+	}) satisfies GetStaticPaths;
+};
+
+const { frenchie, prevId, nextId } = Astro.props;
+
+console.log({ prevId, nextId });
+---
+
+<Layout>
+	<h1>{frenchie.data.name}</h1>
+	<nav>
+		{
+			prevId ? (
+				<a href={`/frenchies/${prevId}`} class="prev" data-id={prevId}>
+					&larr; prev
+				</a>
+			) : null
+		}
+		<a href="/app-like-nav">all photos</a>
+		{
+			nextId ? (
+				<a href={`/frenchies/${nextId}`} class="next" data-id={nextId}>
+					next &rarr;
+				</a>
+			) : null
+		}
+	</nav>
+	<Image
+		src={frenchie.data.image.src}
+		alt={frenchie.data.image.alt}
+		width="600"
+		height="600"
+		transition:name={`frenchie-${frenchie.id}`}
+		class="image"
+	/>
+</Layout>
+
+<script>
+	document.addEventListener('keydown', (event) => {
+		const prev = document.querySelector('.prev') as HTMLElement;
+		const next = document.querySelector('.next') as HTMLElement;
+		const img = document.querySelector('.image') as HTMLElement;
+
+		if (event.key === 'ArrowLeft') {
+			// @ts-ignore
+			img.style.viewTransitionName = `frenchie-${prev.dataset.id}`;
+			prev?.click();
+		}
+
+		if (event.key === 'ArrowRight') {
+			next?.click();
+		}
+	});
+</script>

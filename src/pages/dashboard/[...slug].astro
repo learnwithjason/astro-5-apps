@@ -17,6 +17,6 @@ export async function getStaticPaths() {
 }
 ---
 
-<Layout>
+<Layout fullWidth={true}>
   <ClientDashboard client:only url={Astro.url.toString()} />
 </Layout>

@@ -1,0 +1,22 @@
+[
+  {
+    "label": "Form Submission",
+    "slug": "/forms"
+  },
+  {
+    "label": "Lots of Client-Side State",
+    "slug": "/state"
+  },
+  {
+    "label": "Login-Protected Dashboard",
+    "slug": "/dashboard"
+  },
+  {
+    "label": "Real-Time Updates",
+    "slug": "/real-time"
+  },
+  {
+    "label": "App-Like Navigation",
+    "slug": "/app-like-nav"
+  }
+]

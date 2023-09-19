@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import Layout from '../layouts/default.astro';
+
+import { getCollection } from 'astro:content';
+
+const frenchies = await getCollection('frenchies');
+---
+
+<Layout>
+	<h1>App-Like Navigation</h1>
+
+	<div class="gallery">
+		{
+			frenchies.map((frenchie) => {
+				return (
+					<a href={`/frenchies/${frenchie.id}`}>
+						<Image
+							src={frenchie.data.image.src}
+							alt={frenchie.data.image.alt}
+							width="600"
+							height="600"
+							transition:name={`frenchie-${frenchie.id}`}
+							id={`frenchie-${frenchie.id}`}
+						/>
+					</a>
+				);
+			})
+		}
+	</div>
+</Layout>
+
+<style>
+	.gallery {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+
+		& a {
+			display: block;
+			width: 200px;
+		}
+
+		& img {
+			aspect-ratio: 1;
+			height: auto;
+			width: 100%;
+		}
+	}
+</style>

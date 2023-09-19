@@ -3,9 +3,10 @@ import {
   SignedIn,
   SignedOut,
   SignIn,
-  SignOutButton,
   RedirectToSignIn,
   UserButton,
+  UserProfile,
+  useUser,
 } from '@clerk/clerk-react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import styles from './dashboard.module.css';
@@ -19,6 +20,7 @@ const DashboardHeader = () => {
         afterSignOutUrl="/dashboard"
         appearance={{
           elements: {
+            rootBox: styles.rootBox,
             avatarBox: styles.avatarBox,
           },
         }}
@@ -28,28 +30,34 @@ const DashboardHeader = () => {
 };
 
 const DashboardHome = ({ url }: { url: string }) => {
+  const { user } = useUser();
+
   return (
-    <>
-      <SignedOut>
-        <p>You are logged out!</p>
-        <SignIn afterSignInUrl={url} afterSignUpUrl={url} />
-      </SignedOut>
-      <SignedIn>
-        <a href="/dashboard/account">View your account</a>
-      </SignedIn>
-    </>
+    <div className={styles.container}>
+      <h1>Manage Your Account</h1>
+      <p>Welcome back, {user?.firstName}!</p>
+    </div>
   );
 };
 
 const DashboardAccount = () => {
-  return <h1>Account</h1>;
+  return (
+    <UserProfile
+      appearance={{ elements: { rootBox: { margin: '2rem auto' } } }}
+    />
+  );
 };
 
 const DashboardSettings = () => {
-  return <h1>Settings</h1>;
+  return (
+    <div className={styles.container}>
+      <h1>Settings</h1>
+      <p>TODO add some settings to set.</p>
+    </div>
+  );
 };
 
-const AppRouter = ({ url }: { url: string }) => {
+const DashboardRouter = ({ url }: { url: string }) => {
   const navigate = useNavigate();
 
   return (
@@ -57,38 +65,19 @@ const AppRouter = ({ url }: { url: string }) => {
       publishableKey={import.meta.env.PUBLIC_CLERK_PUBLISHABLE_KEY}
       navigate={(to) => navigate(to)}
     >
+      <SignedOut>
+        <div className={styles.signInBox}>
+          <SignIn afterSignInUrl={url} afterSignUpUrl={url} />
+        </div>
+      </SignedOut>
       <SignedIn>
         <DashboardHeader />
+        <Routes>
+          <Route path="/dashboard" element={<DashboardHome url={url} />} />
+          <Route path="/dashboard/account" element={<DashboardAccount />} />
+          <Route path="/dashboard/settings" element={<DashboardSettings />} />
+        </Routes>
       </SignedIn>
-      <Routes>
-        <Route path="/dashboard" element={<DashboardHome url={url} />} />
-        <Route
-          path="/dashboard/account"
-          element={
-            <>
-              <SignedIn>
-                <DashboardAccount />
-              </SignedIn>
-              <SignedOut>
-                <RedirectToSignIn />
-              </SignedOut>
-            </>
-          }
-        />
-        <Route
-          path="/dashboard/settings"
-          element={
-            <>
-              <SignedIn>
-                <DashboardSettings />
-              </SignedIn>
-              <SignedOut>
-                <RedirectToSignIn />
-              </SignedOut>
-            </>
-          }
-        />
-      </Routes>
     </ClerkProvider>
   );
 };
@@ -96,7 +85,7 @@ const AppRouter = ({ url }: { url: string }) => {
 export const Dashboard = ({ url }: { url: string }) => {
   return (
     <BrowserRouter>
-      <AppRouter url={url} />
+      <DashboardRouter url={url} />
     </BrowserRouter>
   );
 };

@@ -1,7 +1,27 @@
 ---
 import Layout from '../layouts/default.astro';
+import nav from '../data/nav.json';
 ---
 
 <Layout>
-	<h1>Astro</h1>
+  <h1>Astro Can Handle a Lot More Than You Might Think</h1>
+  <p>
+    While Astro may have gotten its start with content-only websites, it’s
+    quickly advanced to the point where you can build just about anything for
+    the web using Astro.
+  </p>
+  <p>
+    This site showcases 5 use cases that have previously been described as
+    “impossible” with Astro.
+  </p>
+  <h2>5 “Astro can’t do that” use cases, built with Astro</h2>
+  <ol>
+    {
+      nav.map((page) => (
+        <li>
+          <a href={page.slug}>{page.label}</a>
+        </li>
+      ))
+    }
+  </ol>
 </Layout>
